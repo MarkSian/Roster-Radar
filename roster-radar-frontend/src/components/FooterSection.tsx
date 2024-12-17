@@ -1,4 +1,4 @@
-function FooterSection() {
+function FooterSection()  {
   return (
     <>
     <footer className="footer mt-auto py-3 bg-dark text-white fixed-bottom ">
