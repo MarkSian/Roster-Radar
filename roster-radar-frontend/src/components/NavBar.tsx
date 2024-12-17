@@ -16,9 +16,6 @@ function NavBar () {
                 <li className="nav-item">
                 <a className="nav-link text-danger" href="#">Link</a>
                 </li>
-                <li className="nav-item">
-                <a className="nav-link disabled text-danger" aria-disabled="true">Disabled</a>
-                </li>
                 <li className="nav-item dropdown">
                 <a className="nav-link dropdown-toggle text-danger" href="#" data-bs-toggle="dropdown" aria-expanded="false">Dropdown</a>
                 <ul className="dropdown-menu bg-dark">
@@ -29,7 +26,7 @@ function NavBar () {
                 </li>
             </ul>
             <form role="search">
-                <input className="form-control" type="search" placeholder="Search" aria-label="Search"/>
+                <input className="form-control search-input" type="search" placeholder="Search" aria-label="Search"/>
             </form>
             </div>
         </div>
