@@ -20,6 +20,7 @@ function App() {
     console.log('Pro Rosters clicked');
   };
   
+
   return (
     <>
       <NavBar />
