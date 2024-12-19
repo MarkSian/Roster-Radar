@@ -1,4 +1,5 @@
-CREATE DATABASE IF NOT EXISTS roster_db;
+DROP DATABASE IF EXISTS roster_db;
+CREATE DATABASE roster_db;
 
 \c roster_db;
 
@@ -13,21 +14,18 @@ CREATE TABLE users (
 
 --players table
 CREATE TABLE players (
-    player_id SERIAL PRIMARY KEY, --this is the same as the "id" from api 
-    api_id INT UNIQUE NOT NULL, --this is the id from the api
-    player_name VARCHAR(100) NOT NULL,
-    position VARCHAR(50), --position of the player
+    id INT PRIMARY KEY, --this is the id from the api
+    playerName VARCHAR(255) NOT NULL,
+    position VARCHAR(30), --position of the player
     age INT, --age of the player
     per DECIMAL(5, 2), --player efficiency rating
-    box DECIMAL(10, 2), --box plus/minus
-    team VARCHAR(50), --team the player is on
-    block_percentage DECIMAL(5, 2), --block percentage
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    "box" DECIMAL(10, 2), --box plus/minus
+    team VARCHAR(30) --team the player is on
 );
 
 --user_players table
 CREATE TABLE user_players (
     user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
-    player_id INT REFERENCES players(player_id) ON DELETE CASCADE,
-    PRIMARY KEY (user_id, player_id)
+    id INT REFERENCES players(id) ON DELETE CASCADE,
+    PRIMARY KEY (user_id, id)
 );
