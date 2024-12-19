@@ -1,5 +1,5 @@
 body {
-    background-color: #1a1a1a;; /* Replace with your desired color */
+    background-color: #1a1a1a; /* Replace with your desired color */
 }
 
 .custom-border {
@@ -21,4 +21,23 @@ body {
     color: #dc3545; /* Maintain the text color when focused */
     border-color: #dc3545; /* Maintain the border color when focused */
     box-shadow: none; /* Remove the default focus shadow */
+}
+
+.panel-left, .panel-right {
+    height: 100vh; /* Full height of the viewport */
+    padding: 20px; /* Add some padding */
+    background-color: #1a1a1a; /* Match the background color of the body */
+}
+  
+.panel-left {
+    border-right: 1px solid #dc3545; /* Add a red border to the right */
+}
+  
+  .panel-right {
+    border-left: 1px solid #dc3545; /* Add a red border to the left */
+}
+  
+.vertical-line {
+    border-left: 2px solid #dc3545; /* Red vertical line */
+    height: 100%; /* Full height */
 }
