@@ -3,8 +3,8 @@ export interface PlayerData {
     id: number;
     playerName: string;
     position: string;
-    age: number;
     per: number;
+    winShares: number;
     box: number;
     team: string;
-};
+  }

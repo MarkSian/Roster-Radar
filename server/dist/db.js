@@ -3,10 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.pool = exports.Pool = void 0;
+exports.pool = void 0;
 //import
 const pg_1 = require("pg");
-Object.defineProperty(exports, "Pool", { enumerable: true, get: function () { return pg_1.Pool; } });
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 //db connection

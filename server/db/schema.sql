@@ -17,8 +17,8 @@ CREATE TABLE players (
     id INT PRIMARY KEY, --this is the id from the api
     playerName VARCHAR(255) NOT NULL,
     position VARCHAR(30), --position of the player
-    age INT, --age of the player
-    per DECIMAL(5, 2), --player efficiency rating
+    per DECIMAL(5, 2), --player effeciency rating of the player
+    winShares DECIMAL(5, 2), --player efficiency rating
     "box" DECIMAL(10, 2), --box plus/minus
     team VARCHAR(30) --team the player is on
 );
