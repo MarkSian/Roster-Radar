@@ -23,14 +23,17 @@ const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRoste
 
   const fetchPlayers = async () => {
     try {
-      const response = await fetch('http://rest.nbaapi.com/api/PlayerDataAdvanced/query');
-      const data = await response.json();
-      console.log('Fetched players:', data); // Log fetched data
-      setPlayers(data);
+        const response = await fetch('http://localhost:3000/api/players'); // Adjust this URL to match your backend
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        console.log('Fetched players:', data);
+        setPlayers(data); // Assuming data is an array of players
     } catch (error) {
-      console.error('Error fetching players:', error);
+        console.error('Error fetching players:', error);
     }
-  };
+};
 
   useEffect(() => {
     fetchPlayers();

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import pool from './db';
+import  { pool } from './db';
 import { PlayerData } from './models/playerModel';
 
 const fetchAndInsertPlayersFrom2023 = async () => {
