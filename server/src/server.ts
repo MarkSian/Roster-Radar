@@ -1,19 +1,36 @@
-//imports 
 import express from 'express';
 import cors from 'cors';
-import playerRoutes from './routes/playerRoutes';
+import authRoutes from './routes/authRoutes'; // Use default import
+import dotenv from 'dotenv';
+import { pool } from './db'; // Import the pool object
+
+dotenv.config();
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000; // Use an environment variable for the port
 
-//middleware
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-//use player routes
-app.use(playerRoutes);
+// Use auth routes with a prefix (e.g., /api)
+app.use('/api', authRoutes); // This sets up the routes under the /api prefix
+app.get('/api/players', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT * FROM players'); // Adjust the query based on your table structure
+        res.status(200).json(result.rows); // Send the rows back as a JSON response
+    } catch (error) {
+        console.error('Error fetching players:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
 
-//start server
+// Define a root route (optional)
+app.get('/', (req, res) => {
+  res.send('Welcome to the API!');
+});
+
+// Start server
 app.listen(port, () => {
     console.log(`Server started at http://localhost:${port}`);
 });
