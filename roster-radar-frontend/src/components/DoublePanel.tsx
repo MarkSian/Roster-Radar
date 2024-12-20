@@ -9,11 +9,12 @@ interface DoublePanelProps {
 
 interface Player {
   id: number;
-  name: string;
-  points: number;
-  rebounds: number;
-  assists: number;
-  steals: number;
+  playername: string;
+  position: string;
+  per: number;
+  winshares: number;
+  box: number;
+  team: string;
 }
 
 const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRostersClick, onPlayersClick, onProRostersClick }) => {
@@ -23,23 +24,24 @@ const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRoste
 
   const fetchPlayers = async () => {
     try {
-        const response = await fetch('http://localhost:3000/api/players'); // Adjust this URL to match your backend
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        console.log('Fetched players:', data);
-        setPlayers(data); // Assuming data is an array of players
+      const response = await fetch('http://localhost:3000/api/players'); // Adjust this URL to match your backend
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      console.log('Fetched players:', data);
+      setPlayers(data); // Assuming data is an array of players
     } catch (error) {
-        console.error('Error fetching players:', error);
+      console.error('Error fetching players:', error);
     }
-};
+  };
 
   useEffect(() => {
     fetchPlayers();
   }, []);
 
-  const handleMyRosterClick = () => {
+  const handleMyRosterClick = async () => {
+    await fetchPlayers();
     onMyRosterClick();
     console.log('My Roster Clicked:', players); // Log players state
     setLeftPanelContent(
@@ -51,21 +53,23 @@ const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRoste
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
-                <th scope="col">Points</th>
-                <th scope="col">Rebounds</th>
-                <th scope="col">Assists</th>
-                <th scope="col">Steals</th>
+                <th scope="col">Position</th>
+                <th scope="col">Per</th>
+                <th scope="col">Win Shares</th>
+                <th scope="col">Box</th>
+                <th scope="col">Team</th>
               </tr>
             </thead>
             <tbody>
               {players.map((player, index) => (
                 <tr key={player.id}>
                   <th scope="row">{index + 1}</th>
-                  <td>{player.name}</td>
-                  <td>{player.points}</td>
-                  <td>{player.rebounds}</td>
-                  <td>{player.assists}</td>
-                  <td>{player.steals}</td>
+                  <td>{player.playername}</td>
+                  <td>{player.position}</td>
+                  <td>{player.per}</td>
+                  <td>{player.winshares}</td>
+                  <td>{player.box}</td>
+                  <td>{player.team}</td>
                 </tr>
               ))}
             </tbody>
@@ -75,7 +79,8 @@ const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRoste
     );
   };
 
-  const handleOtherRostersClick = () => {
+  const handleOtherRostersClick = async () => {
+    await fetchPlayers();
     onOtherRostersClick();
     console.log('Other Rosters Clicked:', players); // Log players state
     setLeftPanelContent(
@@ -87,21 +92,23 @@ const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRoste
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
-                <th scope="col">Points</th>
-                <th scope="col">Rebounds</th>
-                <th scope="col">Assists</th>
-                <th scope="col">Steals</th>
+                <th scope="col">Position</th>
+                <th scope="col">Per</th>
+                <th scope="col">Win Shares</th>
+                <th scope="col">Box</th>
+                <th scope="col">Team</th>
               </tr>
             </thead>
             <tbody>
               {players.map((player, index) => (
                 <tr key={player.id}>
                   <th scope="row">{index + 1}</th>
-                  <td>{player.name}</td>
-                  <td>{player.points}</td>
-                  <td>{player.rebounds}</td>
-                  <td>{player.assists}</td>
-                  <td>{player.steals}</td>
+                  <td>{player.playername}</td>
+                  <td>{player.position}</td>
+                  <td>{player.per}</td>
+                  <td>{player.winshares}</td>
+                  <td>{player.box}</td>
+                  <td>{player.team}</td>
                 </tr>
               ))}
             </tbody>
@@ -111,7 +118,8 @@ const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRoste
     );
   };
 
-  const handlePlayersClick = () => {
+  const handlePlayersClick = async () => {
+    await fetchPlayers();
     onPlayersClick();
     console.log('Players Clicked:', players); // Log players state
     setRightPanelContent(
@@ -123,21 +131,23 @@ const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRoste
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
-                <th scope="col">Points</th>
-                <th scope="col">Rebounds</th>
-                <th scope="col">Assists</th>
-                <th scope="col">Steals</th>
+                <th scope="col">Position</th>
+                <th scope="col">Per</th>
+                <th scope="col">Win Shares</th>
+                <th scope="col">Box</th>
+                <th scope="col">Team</th>
               </tr>
             </thead>
             <tbody>
               {players.map((player, index) => (
                 <tr key={player.id}>
                   <th scope="row">{index + 1}</th>
-                  <td>{player.name}</td>
-                  <td>{player.points}</td>
-                  <td>{player.rebounds}</td>
-                  <td>{player.assists}</td>
-                  <td>{player.steals}</td>
+                  <td>{player.playername}</td>
+                  <td>{player.position}</td>
+                  <td>{player.per}</td>
+                  <td>{player.winshares}</td>
+                  <td>{player.box}</td>
+                  <td>{player.team}</td>
                 </tr>
               ))}
             </tbody>
@@ -147,33 +157,36 @@ const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRoste
     );
   };
 
-  const handleProRostersClick = () => {
+  const handleProRostersClick = async () => {
+    await fetchPlayers();
     onProRostersClick();
     console.log('Pro Rosters Clicked:', players); // Log players state
     setRightPanelContent(
       <div>
-        <h1 className="fw-bold">Pro Rosters</h1>
+        <h1 className="fw-bold">Top 10 Players</h1>
         <div className="bd-example">
           <table className="table table-dark table-hover">
             <thead>
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
-                <th scope="col">Points</th>
-                <th scope="col">Rebounds</th>
-                <th scope="col">Assists</th>
-                <th scope="col">Steals</th>
+                <th scope="col">Position</th>
+                <th scope="col">Per</th>
+                <th scope="col">Win Shares</th>
+                <th scope="col">Box</th>
+                <th scope="col">Team</th>
               </tr>
             </thead>
             <tbody>
               {players.map((player, index) => (
                 <tr key={player.id}>
                   <th scope="row">{index + 1}</th>
-                  <td>{player.name}</td>
-                  <td>{player.points}</td>
-                  <td>{player.rebounds}</td>
-                  <td>{player.assists}</td>
-                  <td>{player.steals}</td>
+                  <td>{player.playername}</td>
+                  <td>{player.position}</td>
+                  <td>{player.per}</td>
+                  <td>{player.winshares}</td>
+                  <td>{player.box}</td>
+                  <td>{player.team}</td>
                 </tr>
               ))}
             </tbody>
@@ -205,7 +218,7 @@ const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRoste
               Players
             </button>
             <button type="button" className="btn btn-danger btn-outline-dark m-2" onClick={handleProRostersClick}>
-              Pro Rosters
+              Top 10 Players
             </button>
           </div>
         </div>
@@ -220,6 +233,6 @@ const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRoste
       </div>
     </div>
   );
-}
+};
 
 export default DoublePanel;

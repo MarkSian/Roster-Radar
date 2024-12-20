@@ -40,14 +40,15 @@ const fetchAndInsertPlayersFrom2023 = () => __awaiter(void 0, void 0, void 0, fu
         }
         client = yield db_1.pool.connect(); // Acquire a client from the pool
         for (const player of players) {
-            const { id, playerName: playername, position, age, per, box, team, } = player;
+            const { id, playerName, position, per, winShares, box, team } = player;
             try {
-                console.log('Values to insert:', [id, playername, position, age, per, box, team]);
-                console.log(`Preparing to insert player: ${playername} with ID: ${id}`);
+                console.log('Values to insert:', [id, playerName, position, per, winShares, box, team]);
+                console.log(`Preparing to insert player: ${playerName} with ID: ${id}`);
                 yield client.query(`INSERT INTO players (
-                        id, playername, position, age, per, box, team
-                    ) VALUES ($1, $2, $3, $4, $5, $6, $7)`, [id, playername, position, age, per, box, team]);
-                console.log('Inserted player:', playername);
+                        id, playerName, position, per, winShares, box, team
+                    ) VALUES ($1, $2, $3, $4, $5, $6, $7)
+                    ON CONFLICT (id) DO NOTHING`, [id, playerName, position, per, winShares, box, team]);
+                console.log('Inserted player:', playerName);
             }
             catch (insertError) {
                 console.error('Error inserting player:', insertError);

@@ -35,26 +35,27 @@ const fetchAndInsertPlayersFrom2023 = async () => {
         for (const player of players) {
             const {
                 id,
-                playerName: playername,
+                playerName,
                 position,
-                age,
                 per,
+                winShares,
                 box,
-                team,
+                team
             } = player;
 
             try {
-                console.log('Values to insert:', [id, playername, position, age, per, box, team]);
+                console.log('Values to insert:', [id, playerName, position, per, winShares, box, team]);
 
-                console.log(`Preparing to insert player: ${playername} with ID: ${id}`);
+                console.log(`Preparing to insert player: ${playerName} with ID: ${id}`);
                 await client.query(
                     `INSERT INTO players (
-                        id, playername, position, age, per, box, team
-                    ) VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-                    [id, playername, position, age, per, box, team]
+                        id, playerName, position, per, winShares, box, team
+                    ) VALUES ($1, $2, $3, $4, $5, $6, $7)
+                    ON CONFLICT (id) DO NOTHING`,
+                    [id, playerName, position, per, winShares, box, team]
                 );
 
-                console.log('Inserted player:', playername);
+                console.log('Inserted player:', playerName);
             } catch (insertError) {
                 console.error('Error inserting player:', insertError);
             }
@@ -69,5 +70,6 @@ const fetchAndInsertPlayersFrom2023 = async () => {
         await pool.end(); // Ensure to await the end of the pool
     }
 };
+
 
 fetchAndInsertPlayersFrom2023();
