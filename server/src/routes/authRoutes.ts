@@ -55,6 +55,7 @@ router.post('/login', async (req: Request<{}, {}, LoginRequest>, res: Response) 
             }
 
             const token = jwt.sign({ userId: user.user_id }, jwtSecretKey, { expiresIn: '1h' });
+            console.log('Generated Token:', token); 
             return res.json({ token });
         } else {
             return res.status(401).json({ error: 'Invalid credentials' });

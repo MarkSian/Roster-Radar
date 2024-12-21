@@ -4,6 +4,7 @@ import authRoutes from './routes/authRoutes'; // Use default import
 import dotenv from 'dotenv';
 import { pool } from './db'; // Import the pool object
 
+
 dotenv.config();
 
 const app = express();
@@ -13,7 +14,7 @@ const port = process.env.PORT || 3000; // Use an environment variable for the po
 app.use(cors());
 app.use(express.json());
 
-// Use auth routes with a prefix (e.g., /api)
+// Use auth routes 
 app.use('/api', authRoutes); // This sets up the routes under the /api prefix
 app.get('/api/players', async (req, res) => {
     try {
@@ -22,6 +23,37 @@ app.get('/api/players', async (req, res) => {
     } catch (error) {
         console.error('Error fetching players:', error);
         res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Endpoint to add a player to user_players
+app.get('/api/user_players/:userId', async (req, res) => {
+    const { userId } = req.params; // Access userId from the route parameters
+    console.log(`Received request for user ID: ${userId}`); // Log the user ID
+
+    try {
+        const userPlayers = await pool.query(`
+            SELECT p.id, p.playerName, p.position, p.per, p.winShares, p.box, p.team
+            FROM user_players up
+            JOIN players p ON up.id = p.id
+            WHERE up.user_id = $1
+        `, [userId]);
+        
+        if (userPlayers.rows.length === 0) {
+            console.log(`No players found for user ID: ${userId}`); // Log if no players found
+            res.status(404).json({ error: 'No players found for this user.' });
+            console.log('Response sent: 404 Not Found'); // Log the response status
+            return;
+        }
+
+        console.log(`Found players for user ID: ${userId}`, userPlayers.rows); // Log the found players
+        res.setHeader('Content-Type', 'application/json'); // Set content type
+        res.json(userPlayers.rows);
+        console.log('Response sent: 200 OK'); // Log the response status
+    } catch (error) {
+        console.error('Error fetching user players:', error);
+        res.status(500).json({ error: 'Server error' });
+        console.log('Response sent: 500 Internal Server Error'); // Log the response status
     }
 });
 
