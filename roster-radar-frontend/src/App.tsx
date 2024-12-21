@@ -20,8 +20,8 @@ function App() {
     console.log('Players clicked');
   };
 
-  const handleProRostersClick = () => {
-    console.log('Pro Rosters clicked');
+  const handleTop10PlayersClick = () => {
+    console.log('Top 10 Players clicked');
   };
   return (
     <Router>
@@ -34,7 +34,7 @@ function App() {
             <DoublePanel onMyRosterClick={handleMyRosterClick}
               onOtherRostersClick={handleOtherRostersClick}
               onPlayersClick={handlePlayersClick}
-              onProRostersClick={handleProRostersClick}/>
+              onTop10PlayersClick={handleTop10PlayersClick}/>
             <FooterSection />
           </>
         } />

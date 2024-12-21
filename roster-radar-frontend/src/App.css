@@ -41,3 +41,9 @@ body {
     border-left: 2px solid #dc3545; /* Red vertical line */
     height: 100%; /* Full height */
 }
+
+.top-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
