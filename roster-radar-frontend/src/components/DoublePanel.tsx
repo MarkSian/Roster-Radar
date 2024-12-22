@@ -18,7 +18,7 @@ interface Player {
   team: string;
 }
 
-const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRostersClick, onPlayersClick, onTop10PlayersClick }) => {
+const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onPlayersClick, onTop10PlayersClick }) => {
   const [leftPanelContent, setLeftPanelContent] = useState<React.ReactNode>(null);
   const [rightPanelContent, setRightPanelContent] = useState<React.ReactNode>(null);
   const [players, setPlayers] = useState<Player[]>([]);
@@ -35,13 +35,14 @@ const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRoste
       const data = await response.json();
       console.log('Fetched players:', data);
       setPlayers(data); // Assuming data is an array of players
+      setRightPanelContent(renderTable('Players', data)); // Set the right panel content here
     } catch (error) {
       console.error('Error fetching players:', error);
     }
   };
 
   // Fetch top players endpoint
-  const fetchTopPlayers = async () => {
+  const fetchTopPlayers = async (metric: string) => {
     try {
       const response = await fetch('http://localhost:3000/api/top-players'); // Adjust this URL to match your backend
       if (!response.ok) {
@@ -50,12 +51,12 @@ const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRoste
       const data = await response.json();
       console.log('Fetched top players:', data);
       setTopPlayers(data); // Assuming data is an array of players
+      setRightPanelContent(renderTable(metric, data)); // Set the right panel content here
     } catch (error) {
       console.error('Error fetching top players:', error);
     }
   };
 
-  
   // Fetch top winShares endpoint
   const fetchTopWinShares = async () => {
     try {
@@ -72,6 +73,10 @@ const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRoste
     }
   };
 
+  const handleBoxClick = async () => {
+    await fetchTopBoxScore();
+  };
+  
   // Fetch top boxScore endpoint
   const fetchTopBoxScore = async () => {
     try {
@@ -82,6 +87,7 @@ const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRoste
       const data = await response.json();
       console.log('Fetched top box score players:', data);
       setTopPlayers(data); // Assuming data is an array of players
+      setRightPanelContent(renderTable('Top 10 Players by Box', data)); // Set the right panel content here
     } catch (error) {
       console.error('Error fetching top players:', error);
     }
@@ -105,6 +111,7 @@ const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRoste
     }
   }
 
+  // My roster
   const handleMyRosterClick = async () => {
     const userId = getUserId();
     if (userId) {
@@ -194,12 +201,7 @@ const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRoste
   );
 
   // Other rosters
-  const handleOtherRostersClick = async () => {
-    await fetchPlayers();
-    onOtherRostersClick();
-    console.log('Other Rosters Clicked:', players); // Log players state
-    setLeftPanelContent(renderTable('Other Rosters', players));
-  };
+
 
   // Function to get the logged-in user's ID
   interface DecodedToken {
@@ -251,21 +253,18 @@ const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRoste
     await fetchPlayers();
     onPlayersClick();
     console.log('Players Clicked:', players); // Log players state
-    setRightPanelContent(renderTable('Players', players));
   };
 
   // Top 10 Players
   const handleTop10PlayersClick = async () => {
-    await fetchTopPlayers();
+    await fetchTopPlayers('Please Choose a Metric');
     onTop10PlayersClick();
     console.log('Top 10 Players Clicked:', topPlayers); // Log players state
-    setRightPanelContent(renderTable('Please Choose a Metric', topPlayers));
   };
 
   // PER Filter
   const handlePerClick = async () => {
-    await fetchTopPlayers();
-    setRightPanelContent(renderTable('Top 10 Players by PER', topPlayers));
+    await fetchTopPlayers('Top 10 Players by PER');
   };
 
   // Win Shares Filter
@@ -273,11 +272,6 @@ const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRoste
     await fetchTopWinShares();
   };
 
-  // Box Filter
-  const handleBoxClick = async () => {
-    await fetchTopBoxScore();
-    setRightPanelContent(renderTable('Top 10 Players by Box', topPlayers));
-  };
 
   return (
     <div className="container-fluid">
@@ -286,9 +280,6 @@ const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRoste
           <div className="btn-group" role="group" aria-label="Basic outlined example">
             <button type="button" className="btn btn-danger btn-outline-dark m-2" onClick={handleMyRosterClick}>
               My Roster
-            </button>
-            <button type="button" className="btn btn-danger btn-outline-dark m-2" onClick={handleOtherRostersClick}>
-              Other Rosters
             </button>
           </div>
         </div>
