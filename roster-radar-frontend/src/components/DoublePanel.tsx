@@ -5,7 +5,7 @@ interface DoublePanelProps {
   onMyRosterClick: () => void;
   onOtherRostersClick: () => void;
   onPlayersClick: () => void;
-  onProRostersClick: () => void;
+  onTop10PlayersClick: () => void;
 }
 
 interface Player {
@@ -18,12 +18,14 @@ interface Player {
   team: string;
 }
 
-const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRostersClick, onPlayersClick, onProRostersClick }) => {
+const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRostersClick, onPlayersClick, onTop10PlayersClick }) => {
   const [leftPanelContent, setLeftPanelContent] = useState<React.ReactNode>(null);
   const [rightPanelContent, setRightPanelContent] = useState<React.ReactNode>(null);
   const [players, setPlayers] = useState<Player[]>([]);
-  
-  // fetch players from players table
+  const [topPlayers, setTopPlayers] = useState<Player[]>([]);
+  const [topWinShares, setTopWinShares] = useState<Player[]>([]);
+
+  // Fetch players from players table
   const fetchPlayers = async () => {
     try {
       const response = await fetch('http://localhost:3000/api/players'); // Adjust this URL to match your backend
@@ -38,30 +40,73 @@ const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRoste
     }
   };
 
+  // Fetch top players endpoint
+  const fetchTopPlayers = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/api/top-players'); // Adjust this URL to match your backend
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      console.log('Fetched top players:', data);
+      setTopPlayers(data); // Assuming data is an array of players
+    } catch (error) {
+      console.error('Error fetching top players:', error);
+    }
+  };
+
+    // Fetch top winShares endpoint
+  const fetchTopWinShares = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/api/top-winShares'); // Adjust this URL to match your backend
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      console.log('Fetched top win shares players:', data);
+      setTopWinShares(data); // Assuming data is an array of players
+    } catch (error) {
+      console.error('Error fetching top players:', error);
+    }
+  };
+    // Fetch top boxScore endpoint
+  const fetchTopBoxScore = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/api/top-boxScore'); // Adjust this URL to match your backend
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      console.log('Fetched top box score players:', data);
+      setTopPlayers(data); // Assuming data is an array of players
+    } catch (error) {
+      console.error('Error fetching top players:', error);
+    }
+  };  
+
   useEffect(() => {
     fetchPlayers();
   }, []);
 
- //fetch user players
-
- async function fetchUserPlayers(userId: number): Promise<Player[]> {
-  try {
-    const response = await fetch(`http://localhost:3000/api/user_players/${userId}`);
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Error fetching players:', errorText);
-      throw new Error(`HTTP error! status: ${response.status}`);
+  // Fetch user players
+  async function fetchUserPlayers(userId: number): Promise<Player[]> {
+    try {
+      const response = await fetch(`http://localhost:3000/api/user_players/${userId}`);
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Error fetching players:', errorText);
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log('Fetched User Players Data:', data);
+      return data; // Return the fetched user players
+    } catch (error) {
+      console.error('Error fetching players:', error);
+      return []; // Return an empty array in case of error
     }
-    const data = await response.json();
-    console.log('Fetched User Players Data:', data);
-    return data; // Return the fetched user players
-  } catch (error) {
-    console.error('Error fetching players:', error);
-    return []; // Return an empty array in case of error
   }
-}
 
-  //my roster
+  // My roster
   const handleMyRosterClick = async () => {
     const userId = getUserId();
     if (userId) {
@@ -107,177 +152,133 @@ const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRoste
     );
   };
 
-  //other rosters
+  const renderTable = (title: string, players: Player[]) => (
+    <div>
+      <h1 className="fw-bold">{title}</h1>
+      <div className="bd-example">
+        <table className="table table-dark table-hover">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Position</th>
+              <th scope="col">Per</th>
+              <th scope="col">Win Shares</th>
+              <th scope="col">Box</th>
+              <th scope="col">Team</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {players.map((player, index) => (
+              <tr key={player.id}>
+                <th scope="row">{index + 1}</th>
+                <td>{player.playername}</td>
+                <td>{player.position}</td>
+                <td>{player.per}</td>
+                <td>{player.winshares}</td>
+                <td>{player.box}</td>
+                <td>{player.team}</td>
+                <td>
+                  <button
+                    className="btn btn-danger btn-outline-dark m-2"
+                    onClick={() => addPlayerToRoster(player.id)}
+                  >
+                    Add to Roster
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+
+  // Other rosters
   const handleOtherRostersClick = async () => {
     await fetchPlayers();
     onOtherRostersClick();
     console.log('Other Rosters Clicked:', players); // Log players state
-    setLeftPanelContent(
-      <div>
-        <h1 className="fw-bold">Other Rosters</h1>
-        <div className="bd-example">
-          <table className="table table-dark table-hover">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Position</th>
-                <th scope="col">Per</th>
-                <th scope="col">Win Shares</th>
-                <th scope="col">Box</th>
-                <th scope="col">Team</th>
-              </tr>
-            </thead>
-            <tbody>
-              {players.map((player, index) => (
-                <tr key={player.id}>
-                  <th scope="row">{index + 1}</th>
-                  <td>{player.playername}</td>
-                  <td>{player.position}</td>
-                  <td>{player.per}</td>
-                  <td>{player.winshares}</td>
-                  <td>{player.box}</td>
-                  <td>{player.team}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    );
+    setLeftPanelContent(renderTable('Other Rosters', players));
   };
-  //add player to roster
+
   // Function to get the logged-in user's ID
   interface DecodedToken {
-    userId: string; // Adjust the type according to your actual userId type
-    // Add other fields as necessary
-}
+    userId: string; // Assuming the user ID is stored in the token
+  }
 
-const getUserId = (): string | null => {
+  const getUserId = (): string | null => {
     const token = localStorage.getItem('token'); // Assuming you stored the token in local storage
     if (token) {
-        const decodedToken = jwtDecode<DecodedToken>(token); // Decode the token and cast to DecodedToken
-        return decodedToken.userId; // Assuming the user ID is stored in the 'userId' field
+      const decodedToken = jwtDecode<DecodedToken>(token); // Decode the token and cast to DecodedToken
+      return decodedToken.userId; // Assuming the user ID is stored in the 'userId' field
     }
     return null; // Return null if no token is found
-};
+  };
 
-const addPlayerToRoster = async (playerId: number) => {
+  const addPlayerToRoster = async (playerId: number) => {
     const userId = getUserId(); // Get the logged-in user's ID
 
     if (!userId) {
-        console.error('User is not logged in');
-        return; // Exit if user ID is not available
+      console.error('User is not logged in');
+      return; // Exit if user ID is not available
     }
 
     try {
-        const response = await fetch('http://localhost:3000/api/user_players', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ userId, playerId }),
-        });
+      const response = await fetch('http://localhost:3000/api/user_players', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, playerId }),
+      });
 
-        if (response.ok) {
-            const addedPlayer = await response.json();
-            console.log('Player added to roster:', addedPlayer);
-            // Optionally, update the UI or notify the user
-        } else {
-            const error = await response.json();
-            console.error('Error adding player:', error);
-        }
+      if (response.ok) {
+        const addedPlayer = await response.json();
+        console.log('Player added to roster:', addedPlayer);
+        // Optionally, update the UI or notify the user
+      } else {
+        const error = await response.json();
+        console.error('Error adding player:', error);
+      }
     } catch (error) {
-        console.error('Network error:', error);
+      console.error('Network error:', error);
     }
-};
+  };
 
-  //players
+  // Players
   const handlePlayersClick = async () => {
     await fetchPlayers();
     onPlayersClick();
     console.log('Players Clicked:', players); // Log players state
-    setRightPanelContent(
-      <div>
-        <h1 className="fw-bold">Players</h1>
-        <div className="bd-example">
-          <table className="table table-dark table-hover">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Position</th>
-                <th scope="col">Per</th>
-                <th scope="col">Win Shares</th>
-                <th scope="col">Box</th>
-                <th scope="col">Team</th>
-              </tr>
-            </thead>
-            <tbody>
-              {players.map((player, index) => (
-                <tr key={player.id}>
-                  <th scope="row">{index + 1}</th>
-                  <td>{player.playername}</td>
-                  <td>{player.position}</td>
-                  <td>{player.per}</td>
-                  <td>{player.winshares}</td>
-                  <td>{player.box}</td>
-                  <td>{player.team}</td>
-                  <td>
-                    <button
-                      className="btn btn-primary"
-                      onClick={() => addPlayerToRoster(player.id)}
-                    >
-                      Add to Roster
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    );
+    setRightPanelContent(renderTable('Players', players));
   };
 
-  //top 10 players
-  const handleProRostersClick = async () => {
-    await fetchPlayers();
-    onProRostersClick();
-    console.log('Pro Rosters Clicked:', players); // Log players state
-    setRightPanelContent(
-      <div>
-        <h1 className="fw-bold">Top 10 Players</h1>
-        <div className="bd-example">
-          <table className="table table-dark table-hover">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Position</th>
-                <th scope="col">Per</th>
-                <th scope="col">Win Shares</th>
-                <th scope="col">Box</th>
-                <th scope="col">Team</th>
-              </tr>
-            </thead>
-            <tbody>
-              {players.map((player, index) => (
-                <tr key={player.id}>
-                  <th scope="row">{index + 1}</th>
-                  <td>{player.playername}</td>
-                  <td>{player.position}</td>
-                  <td>{player.per}</td>
-                  <td>{player.winshares}</td>
-                  <td>{player.box}</td>
-                  <td>{player.team}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    );
+  // Top 10 Players
+  const handleTop10PlayersClick = async () => {
+    await fetchTopPlayers();
+    onTop10PlayersClick();
+    console.log('Top 10 Players Clicked:', topPlayers); // Log players state
+    setRightPanelContent(renderTable('Please Choose a Metric', topPlayers));
+  };
+
+  // PER Filter
+  const handlePerClick = async () => {
+    await fetchTopPlayers();
+    setRightPanelContent(renderTable('Top 10 Players by PER', topPlayers));
+  };
+
+  // Win Shares Filter
+  const handleWinSharesClick = async () => {
+    await fetchTopWinShares();
+    setRightPanelContent(renderTable('Top 10 Players by Win Shares', topWinShares));
+  };
+
+  // Box Filter
+  const handleBoxClick = async () => {
+    await fetchTopBoxScore();
+    setRightPanelContent(renderTable('Top 10 Players by Box', topPlayers));
   };
 
   return (
@@ -301,8 +302,19 @@ const addPlayerToRoster = async (playerId: number) => {
             <button type="button" className="btn btn-danger btn-outline-dark m-2" onClick={handlePlayersClick}>
               Players
             </button>
-            <button type="button" className="btn btn-danger btn-outline-dark m-2" onClick={handleProRostersClick}>
+            <button type="button" className="btn btn-danger btn-outline-dark m-2" onClick={handleTop10PlayersClick}>
               Top 10 Players
+            </button>
+          </div>
+          <div className="btn-group top-buttons mt-3" role="group" aria-label="Basic outlined example">
+            <button type="button" className="btn btn-danger btn-outline-dark m-2" onClick={handlePerClick}>
+              PER
+            </button>
+            <button type="button" className="btn btn-danger btn-outline-dark m-2" onClick={handleWinSharesClick}>
+              Win Share
+            </button>
+            <button type="button" className="btn btn-danger btn-outline-dark m-2" onClick={handleBoxClick}>
+              Box
             </button>
           </div>
         </div>
