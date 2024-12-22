@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 
 interface DoublePanelProps {
@@ -23,7 +23,7 @@ const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRoste
   const [rightPanelContent, setRightPanelContent] = useState<React.ReactNode>(null);
   const [players, setPlayers] = useState<Player[]>([]);
   const [topPlayers, setTopPlayers] = useState<Player[]>([]);
-  const [topWinShares, setTopWinShares] = useState<Player[]>([]);
+  const [, setTopWinShares] = useState<Player[]>([]);
 
   // Fetch players from players table
   const fetchPlayers = async () => {
@@ -55,7 +55,8 @@ const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRoste
     }
   };
 
-    // Fetch top winShares endpoint
+  
+  // Fetch top winShares endpoint
   const fetchTopWinShares = async () => {
     try {
       const response = await fetch('http://localhost:3000/api/top-winShares'); // Adjust this URL to match your backend
@@ -65,11 +66,13 @@ const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRoste
       const data = await response.json();
       console.log('Fetched top win shares players:', data);
       setTopWinShares(data); // Assuming data is an array of players
+      setRightPanelContent(renderTable('Top 10 Players by Win Shares', data)); // Set the right panel content here
     } catch (error) {
       console.error('Error fetching top players:', error);
     }
   };
-    // Fetch top boxScore endpoint
+
+  // Fetch top boxScore endpoint
   const fetchTopBoxScore = async () => {
     try {
       const response = await fetch('http://localhost:3000/api/top-boxScore'); // Adjust this URL to match your backend
@@ -82,11 +85,7 @@ const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRoste
     } catch (error) {
       console.error('Error fetching top players:', error);
     }
-  };  
-
-  useEffect(() => {
-    fetchPlayers();
-  }, []);
+  };
 
   // Fetch user players
   async function fetchUserPlayers(userId: number): Promise<Player[]> {
@@ -106,50 +105,49 @@ const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRoste
     }
   }
 
-  // My roster
   const handleMyRosterClick = async () => {
     const userId = getUserId();
     if (userId) {
       const userPlayers = await fetchUserPlayers(Number(userId)); // Fetch user players
       setPlayers(userPlayers); // Update the players state with user-specific players
+      console.log('My Roster Clicked:', userPlayers); // Log players state after fetching
+      setLeftPanelContent(
+        <div>
+          <h1 className="fw-bold">My Roster</h1>
+          <div className="bd-example">
+            <table className="table table-dark table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Position</th>
+                  <th scope="col">Per</th>
+                  <th scope="col">Win Shares</th>
+                  <th scope="col">Box</th>
+                  <th scope="col">Team</th>
+                </tr>
+              </thead>
+              <tbody>
+                {userPlayers.map((player, index) => (
+                  <tr key={player.id}>
+                    <th scope="row">{index + 1}</th>
+                    <td>{player.playername}</td>
+                    <td>{player.position}</td>
+                    <td>{player.per}</td>
+                    <td>{player.winshares}</td>
+                    <td>{player.box}</td>
+                    <td>{player.team}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      );
     } else {
       console.error('User ID not found');
     }
     onMyRosterClick();
-    console.log('My Roster Clicked:', players); // Log players state
-    setLeftPanelContent(
-      <div>
-        <h1 className="fw-bold">My Roster</h1>
-        <div className="bd-example">
-          <table className="table table-dark table-hover">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Position</th>
-                <th scope="col">Per</th>
-                <th scope="col">Win Shares</th>
-                <th scope="col">Box</th>
-                <th scope="col">Team</th>
-              </tr>
-            </thead>
-            <tbody>
-              {players.map((player, index) => (
-                <tr key={player.id}>
-                  <th scope="row">{index + 1}</th>
-                  <td>{player.playername}</td>
-                  <td>{player.position}</td>
-                  <td>{player.per}</td>
-                  <td>{player.winshares}</td>
-                  <td>{player.box}</td>
-                  <td>{player.team}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    );
   };
 
   const renderTable = (title: string, players: Player[]) => (
@@ -273,7 +271,6 @@ const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRoste
   // Win Shares Filter
   const handleWinSharesClick = async () => {
     await fetchTopWinShares();
-    setRightPanelContent(renderTable('Top 10 Players by Win Shares', topWinShares));
   };
 
   // Box Filter
