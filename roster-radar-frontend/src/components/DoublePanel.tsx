@@ -216,7 +216,8 @@ const DoublePanel: React.FC<DoublePanelProps> = ({ onMyRosterClick, onOtherRoste
     }
     return null; // Return null if no token is found
   };
-
+  
+// add player to roster
   const addPlayerToRoster = async (playerId: number) => {
     const userId = getUserId(); // Get the logged-in user's ID
 

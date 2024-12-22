@@ -25,6 +25,28 @@ app.get('/api/players', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+// Endpoint to add a player to user_players
+app.post('/api/user_players', async (req, res) => {
+  const { userId, playerId } = req.body; // Extract userId and playerId from the request body
+
+  if (!userId || !playerId) {
+      return res.status(400).json({ error: 'User ID and Player ID are required.' });
+  }
+
+  try {
+      // Insert the new player into the user_players table
+      const result = await pool.query(`
+          INSERT INTO user_players (user_id, id)  -- Use 'id' instead of 'player_id'
+          VALUES ($1, $2)
+          RETURNING *`, [userId, playerId]);
+
+      const addedPlayer = result.rows[0]; // Get the added player data
+      res.status(201).json(addedPlayer); // Send back the added player data
+  } catch (error) {
+      console.error('Error adding player to roster:', error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 // Endpoint to add a player to user_players
 app.get('/api/user_players/:userId', async (req, res) => {
