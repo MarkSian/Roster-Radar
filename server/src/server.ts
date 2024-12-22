@@ -57,6 +57,39 @@ app.get('/api/user_players/:userId', async (req, res) => {
     }
 });
 
+// Endpoint to fetch top 10 players by PER
+app.get('/api/top-players', async (req, res) => {
+    try {
+      const result = await pool.query('SELECT * FROM players ORDER BY per DESC LIMIT 10');
+      res.status(200).json(result.rows);
+    } catch (error) {
+      console.error('Error fetching top players:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Endpoint to fetch top 10 players by PER
+app.get('/api/top-winShares', async (req, res) => {
+    try {
+      const result = await pool.query('SELECT * FROM players ORDER BY winShares DESC LIMIT 10');
+      res.status(200).json(result.rows);
+    } catch (error) {
+      console.error('Error fetching top players:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Endpoint to fetch top 10 players by PER
+app.get('/api/top-boxScore', async (req, res) => {
+    try {
+      const result = await pool.query('SELECT * FROM players ORDER BY box DESC LIMIT 10');
+      res.status(200).json(result.rows);
+    } catch (error) {
+      console.error('Error fetching top players:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 // Define a root route (optional)
 app.get('/', (req, res) => {
   res.send('Welcome to the API!');
