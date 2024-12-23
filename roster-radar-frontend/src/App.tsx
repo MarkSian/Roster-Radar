@@ -12,10 +12,6 @@ function App() {
     console.log('My Roster clicked');
   };
 
-  const handleOtherRostersClick = () => {
-    console.log('Other Rosters clicked');
-  };
-
   const handlePlayersClick = () => {
     console.log('Players clicked');
   };
@@ -32,7 +28,6 @@ function App() {
           <>
             <NavBar />
             <DoublePanel onMyRosterClick={handleMyRosterClick}
-              onOtherRostersClick={handleOtherRostersClick}
               onPlayersClick={handlePlayersClick}
               onTop10PlayersClick={handleTop10PlayersClick}/>
             <FooterSection />
