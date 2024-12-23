@@ -3,7 +3,6 @@ import { jwtDecode } from 'jwt-decode';
 
 interface DoublePanelProps {
   onMyRosterClick: () => void;
-  onOtherRostersClick: () => void;
   onPlayersClick: () => void;
   onTop10PlayersClick: () => void;
 }
