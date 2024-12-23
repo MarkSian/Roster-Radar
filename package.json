@@ -7,21 +7,29 @@
     "@types/node": "^22.10.2",
     "@types/pg": "^8.11.10",
     "concurrently": "^9.1.0",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "ts-node": "^10.9.2"
   },
   "dependencies": {
-    "bcrypt": "^5.1.1"
+    "bcrypt": "^5.1.1",
+    "axios": "^1.7.9",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.13.1",
+    "pg-pool": "^3.7.0"
   },
   "scripts": {
     "install": "cd server && npm i && cd ../roster-radar-frontend && npm i",
-    "build:server": "cd server && npm run build",
-    "start:server": "cd server && npm start",
-    "populate:database": "cd server && npm run populate",
-    "build-and-start": "npm run build:server && npm run populate:database && npm run start:server",
+    "build:server": "cd server && tsc",
+    "start:server": "cd server && node dist/server.js",
+    "populate:database": "cd server && ts-node src/populateDatabase.ts",
+    "init:database": "cd server && ts-node src/initDatabase.ts",
+    "build": "npm run build:server && npm run init:database && npm run populate:database && build:frontend",
     "build:frontend": "cd roster-radar-frontend && npm run build",
-    "render-build": "npm install && npm run build:frontend && npm run build:server",
+    "render-build": "npm install && npm run build",
     "start": "concurrently \"cd server && npm start\" \"cd roster-radar-frontend && npm start\"",
-    "start:dev": "concurrently \"npm run build-and-start\" \"cd roster-radar-frontend && npm run dev\""
-    
+    "start:dev": "concurrently \"cd server && npm start\" \"cd roster-radar-frontend && npm run dev\""
   }
 }

@@ -18,13 +18,13 @@ const fetchAndInsertPlayersFrom2023 = () => __awaiter(void 0, void 0, void 0, fu
     console.log('Starting to fetch and insert players from the 2023 season');
     let client;
     try {
-        console.log(`Fetching players from the 2023 season`);
+        console.log('Fetching players from the 2023 season');
         const response = yield axios_1.default.get('http://rest.nbaapi.com/api/PlayerDataAdvanced/query', {
             params: {
-                season: '2023', // Add this line to filter by the 2023 season
+                season: '2023',
                 sortBy: 'playerName',
                 ascending: 'true',
-                pageSize: '900', // You can adjust the pageSize as needed
+                pageSize: '900',
             }
         });
         console.log('Response:', response.data);
@@ -45,9 +45,9 @@ const fetchAndInsertPlayersFrom2023 = () => __awaiter(void 0, void 0, void 0, fu
                 console.log('Values to insert:', [id, playerName, position, per, winShares, box, team]);
                 console.log(`Preparing to insert player: ${playerName} with ID: ${id}`);
                 yield client.query(`INSERT INTO players (
-                        id, playerName, position, per, winShares, box, team
-                    ) VALUES ($1, $2, $3, $4, $5, $6, $7)
-                    ON CONFLICT (id) DO NOTHING`, [id, playerName, position, per, winShares, box, team]);
+            id, playerName, position, per, winShares, box, team
+          ) VALUES ($1, $2, $3, $4, $5, $6, $7)
+          ON CONFLICT (id) DO NOTHING`, [id, playerName, position, per, winShares, box, team]);
                 console.log('Inserted player:', playerName);
             }
             catch (insertError) {
@@ -62,7 +62,11 @@ const fetchAndInsertPlayersFrom2023 = () => __awaiter(void 0, void 0, void 0, fu
         if (client) {
             client.release(); // Release the client back to the pool
         }
-        yield db_1.pool.end(); // Ensure to await the end of the pool
     }
 });
-fetchAndInsertPlayersFrom2023();
+fetchAndInsertPlayersFrom2023().then(() => {
+    db_1.pool.end(); // End the pool after all operations are complete
+}).catch((error) => {
+    console.error('Error during database population:', error);
+    db_1.pool.end(); // Ensure the pool is ended even if there is an error
+});
