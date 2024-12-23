@@ -31,48 +31,59 @@ const AuthForm: React.FC = () => {
     }
   };
 
+
   return (
-    <div>
-      <h2>{isLogin ? 'Login' : 'Register'}</h2>
-      <form onSubmit={handleAuth}>
-        <div>
-          <label>Username:</label>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        {!isLogin && ( // Show email input only when registering
-          <div>
-            <label>Email:</label>
+    <div className="container mt-5">
+      <div className="card p-4 shadow-sm">
+        <h2 className="mb-4 text-center">{isLogin ? 'Login' : 'Register'}</h2>
+        <form onSubmit={handleAuth}>
+          <div className="mb-3">
+            <label className="form-label">Username:</label>
             <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              className="form-control"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
             />
           </div>
-        )}
-        <button type="submit">{isLogin ? 'Login' : 'Register'}</button>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-      </form>
-      <p>
-        {isLogin ? 'Don\'t have an account?' : 'Already have an account?'}
-        <button onClick={() => setIsLogin(!isLogin)}>
-          {isLogin ? 'Register' : 'Login'}
-        </button>
-      </p>
+          <div className="mb-3">
+            <label className="form-label">Password:</label>
+            <input
+              type="password"
+              className="form-control"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          {!isLogin && ( // Show email input only when registering
+            <div className="mb-3">
+              <label className="form-label">Email:</label>
+              <input
+                type="email"
+                className="form-control"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+          )}
+          <button type="submit" className="btn btn-primary w-100">
+            {isLogin ? 'Login' : 'Register'}
+          </button>
+          {error && <p className="text-danger mt-2">{error}</p>}
+        </form>
+        <p className="mt-3 text-center">
+          {isLogin ? 'Don\'t have an account?' : 'Already have an account?'}
+          <button
+            className="btn btn-link p-0"
+            onClick={() => setIsLogin(!isLogin)}
+          >
+            {isLogin ? 'Register' : 'Login'}
+          </button>
+        </p>
+      </div>
     </div>
   );
 };
