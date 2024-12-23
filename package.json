@@ -18,6 +18,7 @@
     "start:server": "cd server && npm start",
     "populate:database": "cd server && npm run populate",
     "build-and-start": "npm run build:server && npm run populate:database && npm run start:server",
-    "start:dev": "concurrently \"npm run build-and-start\" \"cd roster-radar-frontend && npm run dev\""
+    "start:dev": "concurrently \"cd roster-radar-frontend && npm run dev\" \"npm run build-and-start\""
+    
   }
 }
