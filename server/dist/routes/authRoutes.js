@@ -53,6 +53,7 @@ router.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 return res.status(500).json({ error: 'JWT secret key is not defined' });
             }
             const token = jsonwebtoken_1.default.sign({ userId: user.user_id }, jwtSecretKey, { expiresIn: '1h' });
+            console.log('Generated Token:', token);
             return res.json({ token });
         }
         else {

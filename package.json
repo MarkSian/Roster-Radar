@@ -10,5 +10,11 @@
   },
   "dependencies": {
     "bcrypt": "^5.1.1"
+  },
+  "scripts": {
+    "build:server": "cd server && npm run build",
+    "start:server": "cd server && npm start",
+    "populate:database": "cd server && npm run populate",
+    "build-and-start": "npm run build:server && npm run populate:database && npm run start:server"
   }
 }
