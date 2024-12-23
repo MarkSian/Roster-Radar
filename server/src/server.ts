@@ -113,7 +113,7 @@ app.get('/api/top-boxScore', async (req, res) => {
 });
 
 // Define a root route (optional)
-app.get('/', (req, res) => {
+app.get('/login', (req, res) => {
   res.send('Welcome to the API!');
 });
 
