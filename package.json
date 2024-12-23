@@ -6,6 +6,7 @@
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.10.2",
     "@types/pg": "^8.11.10",
+    "concurrently": "^9.1.0",
     "typescript": "^5.7.2"
   },
   "dependencies": {
@@ -15,6 +16,7 @@
     "build:server": "cd server && npm run build",
     "start:server": "cd server && npm start",
     "populate:database": "cd server && npm run populate",
-    "build-and-start": "npm run build:server && npm run populate:database && npm run start:server"
+    "build-and-start": "npm run build:server && npm run populate:database && npm run start:server",
+    "start:dev": "concurrently \"npm run build-and-start\" \"cd roster-radar-frontend && npm run dev\""
   }
 }
