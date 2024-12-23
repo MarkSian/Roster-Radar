@@ -13,6 +13,7 @@
     "bcrypt": "^5.1.1"
   },
   "scripts": {
+    "install": "cd server && npm i && cd ../roster-radar-frontend && npm i",
     "build:server": "cd server && npm run build",
     "start:server": "cd server && npm start",
     "populate:database": "cd server && npm run populate",
