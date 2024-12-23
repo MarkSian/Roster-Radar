@@ -1,28 +1,24 @@
-CREATE DATABASE roster_db;
-
-\c roster_db;
-
---user table
+-- User table
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
-    password_hash VARCHAR(255) NOT NULL, --store hashed password
+    password_hash VARCHAR(255) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
---players table
+-- Players table
 CREATE TABLE players (
-    id INT PRIMARY KEY, --this is the id from the api
+    id INT PRIMARY KEY,
     playerName VARCHAR(255) NOT NULL,
-    position VARCHAR(30), --position of the player
-    per DECIMAL(5, 2), --player effeciency rating of the player
-    winShares DECIMAL(5, 2), --player efficiency rating
-    "box" DECIMAL(10, 2), --box plus/minus
-    team VARCHAR(30) --team the player is on
+    position VARCHAR(30),
+    per DECIMAL(5, 2),
+    winShares DECIMAL(5, 2),
+    "box" DECIMAL(10, 2),
+    team VARCHAR(30)
 );
 
---user_players table
+-- User_players table
 CREATE TABLE user_players (
     user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
     id INT REFERENCES players(id) ON DELETE CASCADE,
