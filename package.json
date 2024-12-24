@@ -18,7 +18,8 @@
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.13.1",
-    "pg-pool": "^3.7.0"
+    "pg-pool": "^3.7.0",
+    "ts-node": "^10.9.2"
   },
   "scripts": {
     "install": "cd server && npm i && cd ../roster-radar-frontend && npm i",
