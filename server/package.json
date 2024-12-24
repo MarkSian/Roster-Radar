@@ -1,8 +1,8 @@
 {
   "scripts": {
-    "build": "tsc",
+    "build": "npx tsc",
     "populate": "node dist/populateDatabase.js",
-    "init:database": "node dist/initDatabase.js",
+    "init": "node dist/initDatabase.js",
     "start": "node dist/server.js"
     
   },
