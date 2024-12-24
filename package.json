@@ -24,7 +24,7 @@
     "install": "cd server && npm i && cd ../roster-radar-frontend && npm i",
     "build:server": "cd server && npx tsc",
     "start:server": "cd server && node dist/server.js",
-    "populate:database": "cd server && node dist/populateDatabase.js",
+    "populate:database": "cd server && node dist/populateDataBase.js",
     "init:database": "cd server && node dist/initDatabase.js",
     "big:server": "npm run init:database && npm run populate:database",
     "build": "npm run build:server && npm run big:server && build:frontend",
