@@ -22,7 +22,7 @@
   },
   "scripts": {
     "install": "cd server && npm i && cd ../roster-radar-frontend && npm i",
-    "build:server": "cd server && tsc",
+    "build:server": "cd server && npx tsc",
     "start:server": "cd server && node dist/server.js",
     "populate:database": "cd server && node dist/populateDatabase.js",
     "init:database": "cd server && node dist/initDatabase.js",
