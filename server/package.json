@@ -2,6 +2,7 @@
   "scripts": {
     "build": "tsc",
     "populate": "node dist/populateDatabase.js",
+    "init:database": "node dist/initDatabase.js",
     "start": "node dist/server.js"
     
   },
