@@ -27,7 +27,7 @@
     "start:server": "cd server && node dist/server.js",
     "populate:database": "cd server && node dist/populateDataBase.js",
     "init:database": "cd server && node dist/initDatabase.js",
-    "big:server": "npm run init:database && npm run populate:database",
+    "big:server": "npm run populate:database && npm run init:database",
     "build": "npm run build:server && npm run big:server && build:frontend",
     "build:frontend": "cd roster-radar-frontend && npm run build",
     "render-build": "npm install && npm run build",
