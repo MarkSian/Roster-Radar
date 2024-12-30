@@ -52,6 +52,7 @@
 
       ## Installation
       N/A simply visit the web site and create a account! 
+      *To run this locally, clone the repo into your machine and cd to the folder containing the project. Execute the command npm run render-build and npm run start:dev. Copy the localhost url and paste into the browser. Enjoy!
 
       ## Usage
       Use the app to create your own NBA team! 
