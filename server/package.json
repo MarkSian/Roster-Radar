@@ -1,10 +1,9 @@
 {
-  "type": "module",
   "scripts": {
     "build": "npx tsc",
-    "populate": "node dist/populateDatabase.js",
-    "init": "node dist/initDatabase.js",
-    "start": "node dist/server.js"
+    "populate": "ts-node src/populateDatabase.ts",
+    "init": "ts-node src/initDatabase.ts",
+    "start": "ts-node src/server.ts"
     
   },
   "dependencies": {
