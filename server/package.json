@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "scripts": {
     "build": "npx tsc",
     "populate": "node dist/populateDatabase.js",
