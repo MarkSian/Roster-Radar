@@ -14,10 +14,13 @@
 
   Installation
   N/A simply visit the web site and create a account! 
-  https://roster-radar.onrender.com
+  *To view our most current code visit our collaborator's repo at https://github.com/CodeGA366/roster. This repo will essentially hold the updated readme whereas the link https://github.com/CodeGA366/roster here contains our most current working project.
+  https://roster-x1pq.onrender.com/login
+  
 
   Usage
   Use the app to create your own NBA team! 
+  ![alt text](image.png)
 
   License
   This project is licensed under the MIT license.
@@ -52,7 +55,7 @@
 
       ## Installation
       N/A simply visit the web site and create a account! 
-      *To run this locally, clone the repo into your machine and cd to the folder containing the project. Execute the command npm run render-build and npm run start:dev. Copy the localhost url and paste into the browser. Enjoy!
+      *To run this locally, clone the repo into your machine and cd to the folder containing the project. Execute the command npm install, npm run build, and npm run start. Enjoy!
 
       ## Usage
       Use the app to create your own NBA team! 
